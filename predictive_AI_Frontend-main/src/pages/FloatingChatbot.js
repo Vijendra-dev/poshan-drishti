@@ -404,9 +404,9 @@ Free Iron tablets
       {/* Floating Button */}
       <div onClick={() => { setIsOpen(!isOpen); setUnread(0); }} style={{
         position: 'fixed', bottom: '25px', right: '25px', width: '65px', height: '65px',
-        borderRadius: '50%', background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        borderRadius: '50%', background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        cursor: 'pointer', boxShadow: '0 6px 20px rgba(102,126,234,0.5)',
+        cursor: 'pointer', boxShadow: '0 6px 20px rgba(79, 70, 229, 0.5)',
         zIndex: 9999, transition: 'all 0.3s',
         transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)'
       }}>
@@ -414,7 +414,7 @@ Free Iron tablets
         {unread > 0 && !isOpen && (
           <span style={{
             position: 'absolute', top: '-5px', right: '-5px',
-            background: '#dc3545', color: 'white', borderRadius: '50%',
+            background: '#dc2626', color: 'white', borderRadius: '50%',
             width: '22px', height: '22px', display: 'flex',
             alignItems: 'center', justifyContent: 'center', fontSize: '12px'
           }}>{unread}</span>
@@ -432,7 +432,7 @@ Free Iron tablets
         }}>
           {/* Header */}
           <div style={{
-            background: 'linear-gradient(135deg, #667eea, #764ba2)',
+            background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
             color: 'white', padding: '16px', display: 'flex',
             alignItems: 'center', gap: '10px'
           }}>
@@ -446,13 +446,13 @@ Free Iron tablets
           {/* Quick Questions */}
           <div style={{
             display: 'flex', flexWrap: 'wrap', gap: '6px',
-            padding: '10px', background: '#f8f9fa', borderBottom: '1px solid #e0e0e0'
+            padding: '10px', background: '#f0f4ff', borderBottom: '1px solid #e0e8f0'
           }}>
             {quickQs.map((q, i) => (
               <button key={i} onClick={() => setInput(q)} style={{
                 padding: '5px 11px', borderRadius: '14px', cursor: 'pointer',
-                border: '1px solid #667eea', background: 'white',
-                color: '#667eea', fontSize: '11px', fontWeight: '500'
+                border: '1px solid #4f46e5', background: 'white',
+                color: '#4f46e5', fontSize: '11px', fontWeight: '500'
               }}>{q}</button>
             ))}
           </div>
@@ -466,7 +466,7 @@ Free Iron tablets
               }}>
                 <div style={{
                   maxWidth: '82%', padding: '11px 15px', borderRadius: '16px',
-                  background: msg.from === 'user' ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'white',
+                  background: msg.from === 'user' ? 'linear-gradient(135deg, #4f46e5, #06b6d4)' : 'white',
                   color: msg.from === 'user' ? 'white' : '#333',
                   fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-line',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
@@ -481,11 +481,11 @@ Free Iron tablets
                   display: 'inline-block',
                   width: '40px', height: '40px',
                   border: '4px solid #f3f3f3',
-                  borderTop: '4px solid #667eea',
+                  borderTop: '4px solid #4f46e5',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite'
                 }} />
-                <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>AI thinking...</p>
+                <p style={{ fontSize: '12px', color: '#64748b', marginTop: '8px' }}>AI thinking...</p>
               </div>
             )}
             <div ref={chatEndRef} />
@@ -494,7 +494,7 @@ Free Iron tablets
           {/* Input */}
           <div style={{
             display: 'flex', gap: '10px', padding: '12px',
-            borderTop: '1px solid #e0e0e0', background: 'white'
+            borderTop: '1px solid #e2e8f0', background: 'white'
           }}>
             <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && !loading && send()}
@@ -506,7 +506,7 @@ Free Iron tablets
               }} />
             <button onClick={send} disabled={loading} style={{
               padding: '11px 18px', 
-              background: loading ? '#ccc' : 'linear-gradient(135deg, #667eea, #764ba2)', 
+              background: loading ? '#cbd5e1' : 'linear-gradient(135deg, #4f46e5, #06b6d4)', 
               color: 'white', border: 'none', borderRadius: '12px', 
               cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '16px', fontWeight: 'bold', minWidth: '50px'

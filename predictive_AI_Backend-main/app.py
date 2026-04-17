@@ -1,3 +1,5 @@
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
@@ -51,7 +53,7 @@ def init_db():
     
     conn.commit()
     conn.close()
-    print("✅ Database ready")
+    print("Database ready")
 
 init_db()
 
@@ -168,13 +170,13 @@ def train_ml_model():
     with open('ml_model.pkl', 'wb') as f:
         pickle.dump(model, f)
     
-    print("✅ ML Model trained!")
+    print("ML Model trained!")
     return model
 
 if os.path.exists('ml_model.pkl'):
     with open('ml_model.pkl', 'rb') as f:
         ml_model = pickle.load(f)
-    print("✅ ML Model loaded")
+    print("ML Model loaded")
 else:
     ml_model = train_ml_model()
 
@@ -567,7 +569,7 @@ if __name__ == '__main__':
     print("🚀 POSHANDRISHTI BACKEND SERVER")
     print("="*60)
     print("📡 Running on http://localhost:5000")
-    print("\n✅ Endpoints:")
+    print("\nEndpoints:")
     print("   • POST /api/user/register")
     print("   • POST /api/assessment/create")
     print("   • POST /api/predict (ML Model)")

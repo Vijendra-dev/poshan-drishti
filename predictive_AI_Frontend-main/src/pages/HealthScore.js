@@ -42,10 +42,10 @@ function HealthScore({ userId }) {
     if (latest.anemia !== 'severe') score += 10;
 
     let grade, color;
-    if (score >= 80) { grade = `🟢 ${t('score_excellent')}`; color = '#28a745'; }
-    else if (score >= 60) { grade = `🟡 ${t('score_good')}`; color = '#ffc107'; }
-    else if (score >= 40) { grade = `🟠 ${t('score_at_risk')}`; color = '#fd7e14'; }
-    else { grade = `🔴 ${t('score_critical')}`; color = '#dc3545'; }
+    if (score >= 80) { grade = `🟢 ${t('score_excellent')}`; color = '#10b981'; }
+    else if (score >= 60) { grade = `🟡 ${t('score_good')}`; color = '#f59e0b'; }
+    else if (score >= 40) { grade = `🟠 ${t('score_at_risk')}`; color = '#f97316'; }
+    else { grade = `🔴 ${t('score_critical')}`; color = '#dc2626'; }
 
     return { score, grade, color };
   };
@@ -93,28 +93,28 @@ function HealthScore({ userId }) {
       )}
 
       {/* Nearby */}
-      <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '12px', marginBottom: '20px', border: '2px solid #667eea' }}>
+      <div style={{ background: '#f0f4ff', padding: '20px', borderRadius: '12px', marginBottom: '20px', border: '2px solid #4f46e5' }}>
         <h3>🗺️ {t('score_nearby')}</h3>
-        <p style={{ color: '#666', marginBottom: '15px', fontSize: '14px' }}>⚠️ {t('score_nearby_note')}</p>
+        <p style={{ color: '#64748b', marginBottom: '15px', fontSize: '14px' }}>⚠️ {t('score_nearby_note')}</p>
 
         {nearbyCases.map((area, i) => (
           <div key={i} style={{
             background: 'white', padding: '15px', borderRadius: '10px', marginBottom: '10px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap',
-            borderLeft: `4px solid ${area.risk === 'HIGH' ? '#dc3545' : area.risk === 'MEDIUM' ? '#fd7e14' : '#28a745'}`
+            borderLeft: `4px solid ${area.risk === 'HIGH' ? '#dc2626' : area.risk === 'MEDIUM' ? '#f97316' : '#10b981'}`
           }}>
             <div>
               <p style={{ fontWeight: 'bold', fontSize: '15px' }}>📍 {area.area}</p>
               <div style={{ display: 'flex', gap: '10px', marginTop: '5px', fontSize: '13px' }}>
-                <span style={{ color: '#dc3545' }}>🔴 SAM: {area.samCount}</span>
-                <span style={{ color: '#fd7e14' }}>🟠 MAM: {area.mamCount}</span>
-                <span style={{ color: '#28a745' }}>🟢 Normal: {area.normalCount}</span>
+                <span style={{ color: '#dc2626' }}>🔴 SAM: {area.samCount}</span>
+                <span style={{ color: '#f97316' }}>🟠 MAM: {area.mamCount}</span>
+                <span style={{ color: '#10b981' }}>🟢 Normal: {area.normalCount}</span>
               </div>
             </div>
             <span style={{
               padding: '5px 15px', borderRadius: '15px', fontSize: '13px', fontWeight: 'bold',
-              background: area.risk === 'HIGH' ? '#f8d7da' : area.risk === 'MEDIUM' ? '#fff3cd' : '#d4edda',
-              color: area.risk === 'HIGH' ? '#dc3545' : area.risk === 'MEDIUM' ? '#856404' : '#155724'
+              background: area.risk === 'HIGH' ? '#fee2e2' : area.risk === 'MEDIUM' ? '#fef3c7' : '#dcfce7',
+              color: area.risk === 'HIGH' ? '#dc2626' : area.risk === 'MEDIUM' ? '#b45309' : '#166534'
             }}>
               {area.risk}
             </span>
@@ -123,7 +123,7 @@ function HealthScore({ userId }) {
       </div>
 
       {/* Guide */}
-      <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #667eea' }}>
+      <div style={{ background: '#f0f4ff', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #4f46e5' }}>
         <h3>📚 {t('score_guide')}</h3>
         <p style={{ margin: '5px 0' }}>🟢 <strong>80-100:</strong> {t('score_excellent')}</p>
         <p style={{ margin: '5px 0' }}>🟡 <strong>60-79:</strong> {t('score_good')}</p>

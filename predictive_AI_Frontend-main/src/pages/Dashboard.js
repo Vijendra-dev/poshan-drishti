@@ -28,9 +28,9 @@ function Dashboard({ userId }) {
   useEffect(() => { fetchAssessments(); }, [fetchAssessments]);
 
   const getSeverityColor = (s) => {
-    if (s === 'SAM') return '#dc3545';
-    if (s === 'MAM') return '#fd7e14';
-    return '#28a745';
+    if (s === 'SAM') return '#dc2626';    /* Softer Red */
+    if (s === 'MAM') return '#f59e0b';    /* Soft Amber */
+    return '#10b981';                     /* Soft Green */
   };
 
   const getSeverityLabel = (s) => {
@@ -53,7 +53,7 @@ function Dashboard({ userId }) {
       <h2>📈 {t('dash_title')}</h2>
 
       {error && (
-        <div style={{ background: '#f8d7da', color: '#721c24', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
+        <div style={{ background: '#fee2e2', color: '#991b1b', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
           ❌ {error}
         </div>
       )}
@@ -63,12 +63,12 @@ function Dashboard({ userId }) {
           {/* TRAFFIC LIGHT */}
           <div style={{
             display: 'flex', justifyContent: 'center', gap: '15px',
-            margin: '20px 0', padding: '25px', background: '#333', borderRadius: '20px'
+            margin: '20px 0', padding: '25px', background: 'linear-gradient(135deg, #f0f4ff, #e0f2ff)', borderRadius: '20px'
           }}>
             {['SAM', 'MAM', 'NORMAL'].map((sev, i) => (
               <div key={i} style={{
                 width: '70px', height: '70px', borderRadius: '50%',
-                background: latest.severity === sev ? getSeverityColor(sev) : '#555',
+                background: latest.severity === sev ? getSeverityColor(sev) : '#cbd5e1',
                 boxShadow: latest.severity === sev ? `0 0 20px ${getSeverityColor(sev)}` : 'none',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '30px', transition: 'all 0.5s'
@@ -100,11 +100,11 @@ function Dashboard({ userId }) {
               { label: t('z_wfh'), val: latest.z_wfh || 0, condition: t('z_wasting') }
             ].map((z, i) => (
               <div key={i} style={{
-                background: z.val < -2 ? '#f8d7da' : '#d4edda',
+                background: z.val < -2 ? '#fee2e2' : '#dcfce7',
                 padding: '15px', borderRadius: '12px', textAlign: 'center'
               }}>
-                <p style={{ fontSize: '12px', color: '#666' }}>{z.label}</p>
-                <p style={{ fontSize: '28px', fontWeight: 'bold', color: z.val < -2 ? '#dc3545' : '#28a745' }}>
+                <p style={{ fontSize: '12px', color: '#64748b' }}>{z.label}</p>
+                <p style={{ fontSize: '28px', fontWeight: 'bold', color: z.val < -2 ? '#dc2626' : '#10b981' }}>
                   {z.val.toFixed(2)}
                 </p>
                 <p style={{ fontSize: '11px' }}>{z.val < -2 ? z.condition : t('z_normal')}</p>
@@ -121,7 +121,7 @@ function Dashboard({ userId }) {
               { label: '📊 BMI', value: latest.bmi }
             ].map((m, i) => (
               <div key={i} style={{
-                background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
                 padding: '15px', borderRadius: '12px', textAlign: 'center', color: 'white'
               }}>
                 <p style={{ fontSize: '12px', opacity: 0.9 }}>{m.label}</p>
@@ -141,7 +141,7 @@ function Dashboard({ userId }) {
             borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', marginTop: '10px'
           }}>
             <thead>
-              <tr style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: 'white' }}>
+              <tr style={{ background: 'linear-gradient(135deg, #4f46e5, #06b6d4)', color: 'white' }}>
                 <th style={{ padding: '12px' }}>{t('dash_date')}</th>
                 <th style={{ padding: '12px' }}>{t('de_height')}</th>
                 <th style={{ padding: '12px' }}>{t('de_weight')}</th>
@@ -152,14 +152,14 @@ function Dashboard({ userId }) {
             </thead>
             <tbody>
               {assessments.map((a, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #ddd' }}
-                  onMouseOver={(e) => e.currentTarget.style.background = '#f5f5f5'}
+                <tr key={i} style={{ borderBottom: '1px solid #e2e8f0' }}
+                  onMouseOver={(e) => e.currentTarget.style.background = '#f8fafc'}
                   onMouseOut={(e) => e.currentTarget.style.background = 'white'}>
                   <td style={{ padding: '10px', textAlign: 'center' }}>{new Date(a.date).toLocaleDateString()}</td>
                   <td style={{ padding: '10px', textAlign: 'center' }}>{a.height} cm</td>
                   <td style={{ padding: '10px', textAlign: 'center' }}>{a.weight} kg</td>
                   <td style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold' }}>{a.muac} cm</td>
-                  <td style={{ padding: '10px', textAlign: 'center', color: (a.z_wfh || 0) < -2 ? '#dc3545' : '#28a745', fontWeight: 'bold' }}>
+                  <td style={{ padding: '10px', textAlign: 'center', color: (a.z_wfh || 0) < -2 ? '#dc2626' : '#10b981', fontWeight: 'bold' }}>
                     {(a.z_wfh || 0).toFixed(2)}
                   </td>
                   <td style={{ padding: '10px', textAlign: 'center', color: getSeverityColor(a.severity), fontWeight: 'bold' }}>
@@ -174,7 +174,7 @@ function Dashboard({ userId }) {
 
       <button onClick={fetchAssessments} style={{
         marginTop: '20px', padding: '12px 24px', width: '100%',
-        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
         color: 'white', border: 'none', borderRadius: '8px',
         cursor: 'pointer', fontSize: '16px', fontWeight: '600'
       }}>🔄 {t('refresh')}</button>

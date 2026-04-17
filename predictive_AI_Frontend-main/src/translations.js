@@ -6,7 +6,7 @@ const TRANSLATIONS = {
 
     // App
     welcome: 'Welcome!',
-    app_title: 'Malnutrition Detection System',
+    app_title: 'Poshan Drishti',
     app_subtitle: 'Predictive AI System for Malnutrition - WHO Standards',
     logout: 'Logout',
     submit: 'Submit',
@@ -264,7 +264,7 @@ const TRANSLATIONS = {
     name: 'हिंदी', flag: '🇮🇳', voiceCode: 'hi-IN',
 
     welcome: 'स्वागत है!',
-    app_title: 'कुपोषण Detection System',
+    app_title: 'पोषन दृष्टि',
     app_subtitle: 'कुपोषण पहचान AI प्रणाली - WHO मानक',
     logout: 'लॉगआउट',
     submit: 'जमा करो',
@@ -500,7 +500,7 @@ const TRANSLATIONS = {
     name: 'मराठी', flag: '🇮🇳', voiceCode: 'mr-IN',
 
     welcome: 'स्वागत!',
-    app_title: 'कुपोषण Detection System',
+    app_title: 'पोषन दृष्टि',
     app_subtitle: 'कुपोषण ओळख AI प्रणाली - WHO मानके',
     logout: 'लॉगआउट',
     submit: 'सबमिट करा',
@@ -614,7 +614,7 @@ const TRANSLATIONS = {
     name: 'বাংলা', flag: '🇮🇳', voiceCode: 'bn-IN',
 
     welcome: 'স্বাগতম!',
-    app_title: 'অপুষ্টি শনাক্তকরণ সিস্টেম',
+    app_title: 'পোশন দৃষ্টি',
     app_subtitle: 'অপুষ্টি শনাক্তকরণ AI - WHO মান',
     logout: 'লগআউট',
     submit: 'জমা দিন',
@@ -696,7 +696,7 @@ const TRANSLATIONS = {
     name: 'தமிழ்', flag: '🇮🇳', voiceCode: 'ta-IN',
 
     welcome: 'வரவேற்கிறோம்!',
-    app_title: 'ஊட்டச்சத்து குறைபாடு கண்டறிதல்',
+    app_title: 'பொஷன் திருஷ்டி',
     app_subtitle: 'ஊட்டச்சத்து குறைபாடு AI - WHO தரநிலைகள்',
     logout: 'வெளியேறு',
     close: 'மூடு',
@@ -768,7 +768,7 @@ const TRANSLATIONS = {
     name: 'తెలుగు', flag: '🇮🇳', voiceCode: 'te-IN',
 
     welcome: 'స్వాగతం!',
-    app_title: 'పోషకాహార లోపం గుర్తింపు',
+    app_title: 'పోషన్ దృష్టి',
     app_subtitle: 'పోషకాహార లోపం AI - WHO ప్రమాణాలు',
     logout: 'లాగ్అవుట్',
     close: 'మూసివేయి',
@@ -840,7 +840,7 @@ const TRANSLATIONS = {
     name: 'ગુજરાતી', flag: '🇮🇳', voiceCode: 'gu-IN',
 
     welcome: 'સ્વાગત!',
-    app_title: 'કુપોષણ ઓળખ સિસ્ટમ',
+    app_title: 'પોશન દૃષ્ટિ',
     app_subtitle: 'કુપોષણ ઓળખ AI - WHO ધોરણો',
     logout: 'લૉગઆઉટ',
     close: 'બંધ કરો',
@@ -912,7 +912,7 @@ const TRANSLATIONS = {
     name: 'ಕನ್ನಡ', flag: '🇮🇳', voiceCode: 'kn-IN',
 
     welcome: 'ಸ್ವಾಗತ!',
-    app_title: 'ಅಪೌಷ್ಟಿಕತೆ ಪತ್ತೆ ವ್ಯವಸ್ಥೆ',
+    app_title: 'ಪೋಷನ್ ದೃಷ್ಟಿ',
     app_subtitle: 'ಅಪೌಷ್ಟಿಕತೆ AI - WHO ಮಾನದಂಡಗಳು',
     logout: 'ಲಾಗ್ ಔಟ್',
     close: 'ಮುಚ್ಚಿ',
@@ -981,7 +981,7 @@ const TRANSLATIONS = {
     name: 'മലയാളം', flag: '🇮🇳', voiceCode: 'ml-IN',
 
     welcome: 'സ്വാഗതം!',
-    app_title: 'പോഷകാഹാരക്കുറവ് കണ്ടെത്തൽ',
+    app_title: 'പോഷന് ദൃഷ്ടി',
     app_subtitle: 'പോഷകാഹാരക്കുറവ് AI - WHO മാനദണ്ഡങ്ങൾ',
     logout: 'ലോഗ്ഔട്ട്',
     close: 'അടയ്ക്കുക',
@@ -1050,7 +1050,7 @@ const TRANSLATIONS = {
     name: 'ଓଡ଼ିଆ', flag: '🇮🇳', voiceCode: 'or-IN',
 
     welcome: 'ସ୍ୱାଗତ!',
-    app_title: 'କୁପୋଷଣ ଚିହ୍ନଟ ସିଷ୍ଟମ',
+    app_title: 'ପୋଷନ ଦୃଷ୍ଟି',
     app_subtitle: 'କୁପୋଷଣ AI - WHO ମାନ',
     logout: 'ଲଗ୍ ଆଉଟ',
     close: 'ବନ୍ଦ କରନ୍ତୁ',
@@ -1113,7 +1113,7 @@ const TRANSLATIONS = {
     name: 'ਪੰਜਾਬੀ', flag: '🇮🇳', voiceCode: 'pa-IN',
 
     welcome: 'ਸੁਆਗਤ ਹੈ!',
-    app_title: 'ਕੁਪੋਸ਼ਣ ਪਛਾਣ ਸਿਸਟਮ',
+    app_title: 'ਪੋਸ਼ਨ ਦ੍ਰਿਸ਼ਟੀ',
     app_subtitle: 'ਕੁਪੋਸ਼ਣ AI - WHO ਮਾਪਦੰਡ',
     logout: 'ਲੌਗ ਆਉਟ',
     close: 'ਬੰਦ ਕਰੋ',
@@ -1176,7 +1176,7 @@ const TRANSLATIONS = {
     name: 'اردو', flag: '🇮🇳', voiceCode: 'ur-IN',
 
     welcome: '!خوش آمدید',
-    app_title: 'غذائی قلت کا نظام',
+    app_title: 'غذائی دھندھا',
     app_subtitle: 'غذائی قلت AI - WHO معیارات',
     logout: 'لاگ آؤٹ',
     close: 'بند کریں',
@@ -1239,7 +1239,7 @@ const TRANSLATIONS = {
     name: 'অসমীয়া', flag: '🇮🇳', voiceCode: 'as-IN',
 
     welcome: 'স্বাগতম!',
-    app_title: 'অপুষ্টি চিনাক্তকৰণ ব্যৱস্থা',
+    app_title: 'পোশন দৃষ্টি',
     app_subtitle: 'অপুষ্টি AI - WHO মানদণ্ড',
     logout: 'লগ আউট',
     close: 'বন্ধ কৰক',

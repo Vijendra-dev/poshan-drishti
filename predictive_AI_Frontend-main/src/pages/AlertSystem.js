@@ -419,14 +419,14 @@ function AlertSystem({ userId }) {
 
   return (
     <div style={{ padding: '10px' }}>
-      <h2 style={{ color: '#667eea', marginBottom: '5px' }}>{t('alert_title')}</h2>
-      <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+      <h2 style={{ color: '#4f46e5', marginBottom: '5px' }}>{t('alert_title')}</h2>
+      <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>
         {t('nav_alerts')} + {t('nav_diet')} + {t('nav_hospital')} + SMS
       </p>
 
       {/* ===== SECTION 1: EMERGENCY ===== */}
       <div style={{
-        background: 'linear-gradient(135deg, #dc3545, #c82333)',
+        background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
         padding: '20px', borderRadius: '12px', marginBottom: '20px',
         textAlign: 'center', color: 'white'
       }}>
@@ -440,7 +440,7 @@ function AlertSystem({ userId }) {
           ].map((h, i) => (
             <button key={i} onClick={() => window.open(`tel:${h.n}`, '_self')} style={{
               padding: '10px 18px', fontSize: '14px', fontWeight: 'bold',
-              background: 'white', color: '#dc3545', border: 'none',
+              background: 'white', color: '#dc2626', border: 'none',
               borderRadius: '8px', cursor: 'pointer'
             }}>{h.l}</button>
           ))}
@@ -449,9 +449,9 @@ function AlertSystem({ userId }) {
 
       {/* ===== SECTION 2: AUTO SHARE TOGGLE ===== */}
       <div style={{
-        background: autoShareEnabled ? '#d4edda' : '#f8d7da',
+        background: autoShareEnabled ? '#dcfce7' : '#fee2e2',
         padding: '15px', borderRadius: '12px', marginBottom: '20px',
-        border: `2px solid ${autoShareEnabled ? '#28a745' : '#dc3545'}`,
+        border: `2px solid ${autoShareEnabled ? '#10b981' : '#dc2626'}`,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px'
       }}>
         <div>
@@ -463,15 +463,15 @@ function AlertSystem({ userId }) {
           </p>
         </div>
         <button onClick={() => setAutoShareEnabled(!autoShareEnabled)} style={{
-          padding: '8px 20px', background: autoShareEnabled ? '#dc3545' : '#28a745',
+          padding: '8px 20px', background: autoShareEnabled ? '#dc2626' : '#10b981',
           color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold'
         }}>{autoShareEnabled ? 'Turn OFF' : 'Turn ON'}</button>
       </div>
 
       {/* ===== SECTION 3: ALERTS ===== */}
       {alerts.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '30px', background: '#f8f9fa', borderRadius: '12px', marginBottom: '20px' }}>
-          <p style={{ fontSize: '16px', color: '#666' }}>{t('no_data')}</p>
+        <div style={{ textAlign: 'center', padding: '30px', background: '#f8fafc', borderRadius: '12px', marginBottom: '20px' }}>
+          <p style={{ fontSize: '16px', color: '#64748b' }}>{t('no_data')}</p>
         </div>
       )}
 

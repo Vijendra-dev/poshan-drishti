@@ -10,46 +10,138 @@ function HospitalFinder({ userId, lang = 'en' }) {
   const txt = (hi, en) => lang === 'hi' ? hi : en;
 
   // ========================================
+  // 🧪 GPS TEST FUNCTION
+  // ========================================
+  const testGPS = useCallback(() => {
+    console.log('🧪 Testing GPS availability...');
+    console.log('Navigator exists:', !!navigator);
+    console.log('Geolocation exists:', !!navigator.geolocation);
+    console.log('Protocol:', window.location.protocol);
+    console.log('Hostname:', window.location.hostname);
+    
+    if (navigator.permissions) {
+      navigator.permissions.query({name: 'geolocation'}).then(result => {
+        console.log('Geolocation permission:', result.state);
+      });
+    }
+    
+    alert('Check browser console (F12) for GPS test results');
+  }, []);
+
+  // ========================================
+  // 🌐 IP-BASED LOCATION (FALLBACK)
+  // ========================================
+  const getIPLocation = useCallback(async () => {
+    console.log('🌐 Trying IP-based location...');
+    setLoading(true);
+    
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      console.log('🌐 IP Location data:', data);
+      
+      if (data.latitude && data.longitude) {
+        const loc = {
+          lat: data.latitude,
+          lng: data.longitude,
+          accuracy: 10000, // IP-based is less accurate
+          timestamp: Date.now(),
+          source: 'ip'
+        };
+        setUserLocation(loc);
+        setLocationName(`${data.city}, ${data.region}`);
+        console.log('✅ IP-based location set');
+      } else {
+        throw new Error('No location data from IP');
+      }
+    } catch (error) {
+      console.log('❌ IP location failed:', error);
+      alert(txt('IP-based location भी नहीं मिला। Manual entry use करें।', 'IP-based location also failed. Use manual entry.'));
+    }
+    
+    setLoading(false);
+  }, [lang]);
+
+  // ========================================
   // 📍 GPS LOCATION
   // ========================================
   const getGPSLocation = useCallback(() => {
+    console.log('🚀 Starting GPS location detection...');
     setLoading(true);
 
+    // Check for HTTPS requirement
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      console.log('❌ HTTPS required for GPS');
+      alert(txt('GPS के लिए HTTPS connection चाहिए। Localhost पर काम करेगा।', 'GPS requires HTTPS connection. Will work on localhost.'));
+      setLoading(false);
+      return;
+    }
+
     if (!navigator.geolocation) {
+      console.log('❌ Geolocation not supported');
       alert(txt('GPS नहीं है', 'No GPS'));
       setLoading(false);
       return;
     }
 
+    console.log('📍 Requesting geolocation...');
+    // Clear any previous location to force fresh detection
+    setUserLocation(null);
+    setLocationName('');
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
+        console.log('✅ Got position:', position.coords);
         const loc = {
           lat: position.coords.latitude,
-          lng: position.coords.longitude
+          lng: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          timestamp: position.timestamp
         };
         setUserLocation(loc);
         
         // Get location name
         try {
+          console.log('🌍 Fetching location name...');
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${loc.lat}&lon=${loc.lng}`,
             { headers: { 'User-Agent': 'HealthApp/1.0' } }
           );
           const data = await res.json();
+          console.log('📍 Location data:', data);
           const city = data?.address?.city || data?.address?.town || data?.address?.village || data?.address?.district || '';
           const state = data?.address?.state || '';
           setLocationName(city ? `${city}, ${state}` : `${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}`);
-        } catch {
+        } catch (error) {
+          console.log('❌ Error fetching location name:', error);
           setLocationName(`${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}`);
         }
         
         setLoading(false);
+        console.log('✅ GPS location detection complete');
       },
-      () => {
-        alert(txt('Location नहीं मिला', 'Location not found'));
+      (error) => {
+        console.log('❌ GPS Error:', error);
+        let errorMsg = txt('Location नहीं मिला', 'Location not found');
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMsg = txt('Location permission denied. Please allow location access in browser settings.', 'Location permission denied. Please allow location access in browser settings.');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMsg = txt('Location information unavailable. Try manual entry.', 'Location information unavailable. Try manual entry.');
+            break;
+          case error.TIMEOUT:
+            errorMsg = txt('Location request timed out. Try again.', 'Location request timed out. Try again.');
+            break;
+        }
+        alert(errorMsg);
         setLoading(false);
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { 
+        enableHighAccuracy: true, 
+        timeout: 15000,
+        maximumAge: 0  // Force fresh location, don't use cached
+      }
     );
   }, [lang]);
 
@@ -160,13 +252,13 @@ function HospitalFinder({ userId, lang = 'en' }) {
     <div style={{ padding: '15px', maxWidth: '900px', margin: '0 auto' }}>
 
       {/* Title */}
-      <h2 style={{ color: '#667eea', textAlign: 'center', marginBottom: '20px' }}>
+      <h2 style={{ color: '#4f46e5', textAlign: 'center', marginBottom: '20px' }}>
         🏥 {txt('अस्पताल और आंगनवाड़ी खोजें', 'Find Hospitals & Anganwadi')}
       </h2>
 
       {/* ===== EMERGENCY ===== */}
       <div style={{
-        background: 'linear-gradient(135deg, #dc3545, #c82333)',
+        background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
         padding: '20px', borderRadius: '12px', marginBottom: '20px',
         textAlign: 'center', color: 'white'
       }}>
@@ -180,7 +272,7 @@ function HospitalFinder({ userId, lang = 'en' }) {
           ].map(item => (
             <button key={item.num} onClick={() => window.open(`tel:${item.num}`, '_self')}
               style={{
-                padding: '12px 20px', background: 'white', color: '#dc3545',
+                padding: '12px 20px', background: 'white', color: '#dc2626',
                 border: 'none', borderRadius: '8px', fontWeight: 'bold',
                 cursor: 'pointer', fontSize: '14px'
               }}>
@@ -192,10 +284,10 @@ function HospitalFinder({ userId, lang = 'en' }) {
 
       {/* ===== LOCATION SECTION ===== */}
       <div style={{
-        background: '#f8f9fa', padding: '20px', borderRadius: '12px',
-        marginBottom: '20px', border: '2px solid #667eea'
+        background: '#f0f4ff', padding: '20px', borderRadius: '12px',
+        marginBottom: '20px', border: '2px solid #4f46e5'
       }}>
-        <h3 style={{ color: '#667eea', marginTop: 0 }}>
+        <h3 style={{ color: '#4f46e5', marginTop: 0 }}>
           📍 {txt('अपनी Location सेट करें', 'Set Your Location')}
         </h3>
 
@@ -204,16 +296,25 @@ function HospitalFinder({ userId, lang = 'en' }) {
           <button onClick={() => setSearchMethod('gps')}
             style={{
               flex: 1, padding: '12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold',
-              background: searchMethod === 'gps' ? '#007bff' : 'white',
+              background: searchMethod === 'gps' ? '#06b6d4' : 'white',
               color: searchMethod === 'gps' ? 'white' : '#333',
               border: searchMethod === 'gps' ? 'none' : '2px solid #ddd'
             }}>
-            📍 GPS (Auto)
+            📍 GPS (Precise)
+          </button>
+          <button onClick={() => setSearchMethod('ip')}
+            style={{
+              flex: 1, padding: '12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold',
+              background: searchMethod === 'ip' ? '#4f46e5' : 'white',
+              color: searchMethod === 'ip' ? 'white' : '#333',
+              border: searchMethod === 'ip' ? 'none' : '2px solid #ddd'
+            }}>
+            🌐 IP (Approx)
           </button>
           <button onClick={() => setSearchMethod('manual')}
             style={{
               flex: 1, padding: '12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold',
-              background: searchMethod === 'manual' ? '#28a745' : 'white',
+              background: searchMethod === 'manual' ? '#10b981' : 'white',
               color: searchMethod === 'manual' ? 'white' : '#333',
               border: searchMethod === 'manual' ? 'none' : '2px solid #ddd'
             }}>
@@ -224,28 +325,89 @@ function HospitalFinder({ userId, lang = 'en' }) {
         {/* GPS */}
         {searchMethod === 'gps' && (
           <div>
-            <button onClick={getGPSLocation} disabled={loading}
-              style={{
-                width: '100%', padding: '15px',
-                background: loading ? '#ccc' : (userLocation ? '#28a745' : '#007bff'),
-                color: 'white', border: 'none', borderRadius: '8px',
-                fontWeight: 'bold', fontSize: '16px',
-                cursor: loading ? 'not-allowed' : 'pointer'
-              }}>
-              {loading ? '⏳ Detecting...' : (userLocation ? '✅ Location Set!' : txt('📍 Location Detect करें', '📍 Detect Location'))}
-            </button>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <button onClick={getGPSLocation} disabled={loading}
+                style={{
+                  flex: 1, padding: '15px',
+                background: loading ? '#cbd5e1' : (userLocation ? '#10b981' : '#06b6d4'),
+                  color: 'white', border: 'none', borderRadius: '8px',
+                  fontWeight: 'bold', fontSize: '16px',
+                  cursor: loading ? 'not-allowed' : 'pointer'
+                }}>
+                {loading ? '⏳ Detecting...' : (userLocation ? '✅ Location Set!' : txt('📍 Location Detect करें', '📍 Detect Location'))}
+              </button>
+              {userLocation && (
+                <button onClick={getGPSLocation} disabled={loading}
+                  style={{
+                    padding: '15px 20px',
+                    background: '#06b6d4',
+                    color: 'white', border: 'none', borderRadius: '8px',
+                    fontWeight: 'bold', fontSize: '14px',
+                    cursor: loading ? 'not-allowed' : 'pointer'
+                  }}>
+                  🔄 {txt('Refresh', 'Refresh')}
+                </button>
+              )}
+              <button onClick={testGPS}
+                style={{
+                  padding: '15px 20px',
+                  background: '#f59e0b',
+                  color: 'black', border: 'none', borderRadius: '8px',
+                  fontWeight: 'bold', fontSize: '14px',
+                  cursor: 'pointer'
+                }}>
+                🧪 Test GPS
+              </button>
+            </div>
             {locationName && (
               <div style={{
-                marginTop: '12px', padding: '12px', background: '#d4edda',
-                borderRadius: '8px', color: '#155724', textAlign: 'center'
+                marginTop: '12px', padding: '12px', background: '#dcfce7',
+                borderRadius: '8px', color: '#166534', textAlign: 'center'
               }}>
                 📍 <strong>{locationName}</strong>
+                {userLocation?.accuracy && (
+                  <div style={{ fontSize: '12px', marginTop: '5px', color: '#666' }}>
+                    Accuracy: ±{Math.round(userLocation.accuracy)}m
+                  </div>
+                )}
+                {userLocation && (
+                  <div style={{ fontSize: '11px', marginTop: '5px', color: '#666' }}>
+                    Lat: {userLocation.lat.toFixed(6)}, Lng: {userLocation.lng.toFixed(6)}
+                  </div>
+                )}
               </div>
             )}
           </div>
         )}
 
-        {/* Manual */}
+        {/* IP Location */}
+        {searchMethod === 'ip' && (
+          <div>
+            <button onClick={getIPLocation} disabled={loading}
+              style={{
+                width: '100%', padding: '15px',
+                background: loading ? '#cbd5e1' : (userLocation ? '#4f46e5' : '#4f46e5'),
+                color: 'white', border: 'none', borderRadius: '8px',
+                fontWeight: 'bold', fontSize: '16px',
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}>
+              {loading ? '⏳ Detecting...' : (userLocation ? '✅ Location Set!' : txt('🌐 IP Location Detect करें', '🌐 Detect IP Location'))}
+            </button>
+            {locationName && (
+              <div style={{
+                marginTop: '12px', padding: '12px', background: '#dcfce7',
+                borderRadius: '8px', color: '#166534', textAlign: 'center'
+              }}>
+                🌐 <strong>{locationName}</strong> (Approximate)
+                {userLocation?.accuracy && (
+                  <div style={{ fontSize: '12px', marginTop: '5px', color: '#666' }}>
+                    Accuracy: ±{Math.round(userLocation.accuracy/1000)}km
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         {searchMethod === 'manual' && (
           <div>
             <input
@@ -255,7 +417,7 @@ function HospitalFinder({ userId, lang = 'en' }) {
               placeholder={txt('अपना शहर/गांव लिखें (जैसे: Lucknow)', 'Enter your city/village (e.g., Lucknow)')}
               style={{
                 width: '100%', padding: '14px', borderRadius: '8px',
-                border: '2px solid #28a745', fontSize: '16px',
+                border: '2px solid #10b981', fontSize: '16px',
                 marginBottom: '12px', boxSizing: 'border-box'
               }}
             />
@@ -264,9 +426,9 @@ function HospitalFinder({ userId, lang = 'en' }) {
                 <button key={city} onClick={() => setManualLocation(city)}
                   style={{
                     padding: '8px 14px',
-                    background: manualLocation === city ? '#28a745' : 'white',
+                    background: manualLocation === city ? '#10b981' : 'white',
                     color: manualLocation === city ? 'white' : '#333',
-                    border: '1px solid #28a745', borderRadius: '20px',
+                    border: '1px solid #10b981', borderRadius: '20px',
                     cursor: 'pointer', fontSize: '13px'
                   }}>
                   {city}
@@ -275,8 +437,8 @@ function HospitalFinder({ userId, lang = 'en' }) {
             </div>
             {manualLocation && (
               <div style={{
-                marginTop: '12px', padding: '12px', background: '#d4edda',
-                borderRadius: '8px', color: '#155724', textAlign: 'center'
+                marginTop: '12px', padding: '12px', background: '#dcfce7',
+                borderRadius: '8px', color: '#166534', textAlign: 'center'
               }}>
                 📍 {txt('Location:', 'Location:')} <strong>{manualLocation}</strong>
               </div>
@@ -334,7 +496,7 @@ function HospitalFinder({ userId, lang = 'en' }) {
 
       {/* ===== QUICK DIRECTIONS ===== */}
       <div style={{
-        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
         padding: '20px', borderRadius: '12px', marginBottom: '20px', color: 'white'
       }}>
         <h3 style={{ margin: '0 0 15px 0' }}>
@@ -349,7 +511,7 @@ function HospitalFinder({ userId, lang = 'en' }) {
           ].map((item, idx) => (
             <button key={idx} onClick={() => openDirectionsTo(item.query)}
               style={{
-                padding: '12px 20px', background: 'white', color: '#667eea',
+                padding: '12px 20px', background: 'white', color: '#4f46e5',
                 border: 'none', borderRadius: '8px', cursor: 'pointer',
                 fontWeight: 'bold', fontSize: '14px'
               }}>
@@ -363,10 +525,10 @@ function HospitalFinder({ userId, lang = 'en' }) {
       {(userLocation || manualLocation) && (
         <div style={{
           borderRadius: '12px', overflow: 'hidden',
-          marginBottom: '20px', border: '2px solid #667eea'
+          marginBottom: '20px', border: '2px solid #4f46e5'
         }}>
           <div style={{
-            background: '#667eea', padding: '10px 15px',
+            background: '#4f46e5', padding: '10px 15px',
             color: 'white', fontWeight: 'bold'
           }}>
             🗺️ {txt('आपकी Location', 'Your Location')}
@@ -391,10 +553,10 @@ function HospitalFinder({ userId, lang = 'en' }) {
 
       {/* ===== HOW IT WORKS ===== */}
       <div style={{
-        background: '#e8f5e9', padding: '20px', borderRadius: '12px',
-        marginBottom: '20px', border: '2px solid #4caf50'
+        background: '#ecfdf5', padding: '20px', borderRadius: '12px',
+        marginBottom: '20px', border: '2px solid #10b981'
       }}>
-        <h3 style={{ color: '#2e7d32', marginTop: 0 }}>
+        <h3 style={{ color: '#047857', marginTop: 0 }}>
           ℹ️ {txt('कैसे काम करता है?', 'How it works?')}
         </h3>
         <div style={{ color: '#333', fontSize: '14px', lineHeight: '1.8' }}>
@@ -410,6 +572,15 @@ function HospitalFinder({ userId, lang = 'en' }) {
           <p style={{ margin: '8px 0' }}>
             4️⃣ {txt('वहां से directions और contact details मिलेंगे', 'Get directions and contact details from there')}
           </p>
+          <div style={{ marginTop: '15px', padding: '10px', background: '#fef3c7', borderRadius: '6px', border: '1px solid #fcd34d' }}>
+            <strong>🔧 {txt('GPS Troubleshooting:', 'GPS Troubleshooting:')}</strong>
+            <ul style={{ margin: '8px 0', paddingLeft: '20px' }}>
+              <li>{txt('Browser में location permission allow करें', 'Allow location permission in browser')}</li>
+              <li>{txt('Refresh button से location को update करें', 'Use Refresh button to update location')}</li>
+              <li>{txt('यदि GPS काम न करे तो Manual option use करें', 'If GPS doesn\'t work, use Manual option')}</li>
+              <li>{txt('Mobile में GPS on होना चाहिए', 'GPS should be ON in mobile')}</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -425,13 +596,13 @@ function HospitalFinder({ userId, lang = 'en' }) {
           gap: '10px'
         }}>
           {[
-            { num: '108', name: txt('एम्बुलेंस', 'Ambulance'), color: '#dc3545' },
-            { num: '112', name: txt('इमरजेंसी', 'Emergency'), color: '#e91e63' },
-            { num: '102', name: txt('माँ/बच्चा', 'Mother/Child'), color: '#9c27b0' },
-            { num: '104', name: txt('स्वास्थ्य', 'Health'), color: '#2196f3' },
-            { num: '1098', name: txt('बाल हेल्पलाइन', 'Child Helpline'), color: '#4caf50' },
-            { num: '181', name: txt('महिला', 'Women'), color: '#ff9800' },
-            { num: '1800-180-1104', name: txt('पोषण', 'Nutrition'), color: '#795548' }
+            { num: '108', name: txt('एम्बुलेंस', 'Ambulance'), color: '#dc2626' },
+            { num: '112', name: txt('इमरजेंसी', 'Emergency'), color: '#ec4899' },
+            { num: '102', name: txt('माँ/बच्चा', 'Mother/Child'), color: '#8b5cf6' },
+            { num: '104', name: txt('स्वास्थ्य', 'Health'), color: '#06b6d4' },
+            { num: '1098', name: txt('बाल हेल्पलाइन', 'Child Helpline'), color: '#10b981' },
+            { num: '181', name: txt('महिला', 'Women'), color: '#f97316' },
+            { num: '1800-180-1104', name: txt('पोषण', 'Nutrition'), color: '#b45309' }
           ].map(h => (
             <button key={h.num} onClick={() => window.open(`tel:${h.num}`, '_self')}
               style={{

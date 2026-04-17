@@ -328,14 +328,14 @@ function DietPlan({ userId, lang = 'hi' }) {
   // ===============================
   return (
     <div style={{ padding: '15px', maxWidth: '800px', margin: '0 auto' }}>
-      <h2 style={{ color: '#667eea', textAlign: 'center' }}>🍽️ {tx('डाइट प्लान', 'Diet Plan')}</h2>
+      <h2 style={{ color: '#4f46e5', textAlign: 'center' }}>🍽️ {tx('डाइट प्लान', 'Diet Plan')}</h2>
 
       {/* ===== STEP 1: LOCATION ===== */}
       <div style={{
         background: 'white', padding: '20px', borderRadius: '12px',
-        marginBottom: '20px', border: '2px solid #28a745', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        marginBottom: '20px', border: '2px solid #10b981', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
       }}>
-        <h3 style={{ marginTop: 0, color: '#28a745' }}>📍 Step 1: {tx('लोकेशन', 'Location')}</h3>
+        <h3 style={{ marginTop: 0, color: '#10b981' }}>📍 Step 1: {tx('लोकेशन', 'Location')}</h3>
 
         {/* Mode Toggle */}
         <div style={{ display: 'flex', gap: '10px', marginBottom: '15px', flexWrap: 'wrap' }}>
@@ -347,8 +347,8 @@ function DietPlan({ userId, lang = 'hi' }) {
             <button key={item.mode} onClick={() => setLocationMode(item.mode)}
               style={{
                 padding: '10px 18px', borderRadius: '8px', cursor: 'pointer',
-                border: locationMode === item.mode ? '2px solid #28a745' : '1px solid #ddd',
-                background: locationMode === item.mode ? '#d4edda' : 'white',
+                border: locationMode === item.mode ? '2px solid #10b981' : '1px solid #e2e8f0',
+                background: locationMode === item.mode ? '#dcfce7' : 'white',
                 fontWeight: locationMode === item.mode ? 'bold' : 'normal', fontSize: '14px'
               }}>
               {item.icon} {item.label}
@@ -361,9 +361,9 @@ function DietPlan({ userId, lang = 'hi' }) {
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <input type="text" value={manualLocation} onChange={(e) => setManualLocation(e.target.value)}
               placeholder={tx('गाँव/शहर/जिला लिखें...', 'Enter village/city/district...')}
-              style={{ flex: 1, padding: '12px', border: '2px solid #ddd', borderRadius: '8px', minWidth: '200px', fontSize: '15px' }} />
+              style={{ flex: 1, padding: '12px', border: '2px solid #e2e8f0', borderRadius: '8px', minWidth: '200px', fontSize: '15px' }} />
             <button onClick={searchManualLocation} disabled={loadingLocation}
-              style={{ padding: '12px 22px', background: loadingLocation ? '#ccc' : '#28a745', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}>
+              style={{ padding: '12px 22px', background: loadingLocation ? '#cbd5e1' : '#10b981', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}>
               {loadingLocation ? '⏳' : '🔍'}
             </button>
           </div>
